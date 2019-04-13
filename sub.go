@@ -44,17 +44,34 @@ func replLine(input string) []byte {
 	return output
 }
 
+func scanLine(input string) [][]byte {
+	output := re.FindAll([]byte(input), -1)
+	return output
+}
+
 func main() {
 	var setMinusU bool
+	var scanOnly bool
 
 	flag.BoolVar(&setMinusU, "set-u", false, "Raise error when some variable is not set.")
+	flag.BoolVar(&scanOnly, "variables", false, "Output ocurrences of variables in input.")
+	flag.BoolVar(&scanOnly, "v", false, "Output ocurrences of variables in input.")
+
 	flag.CommandLine.Parse(os.Args[1:])
 
 	eachLine(os.Stdin, func(line string) {
-		fmt.Printf("%s", replLine(line))
-		if setMinusU && !all_var_is_set {
-			fmt.Fprintf(os.Stderr, ":: Environment variable '%s' is not set.\n", last_process_var)
-			os.Exit(1)
+		if scanOnly {
+			if found := scanLine(line); found != nil {
+				for _, v := range found {
+					fmt.Printf("%s\n", v[2:len(v)-1])
+				}
+			}
+		} else {
+			if setMinusU && !all_var_is_set {
+				fmt.Fprintf(os.Stderr, ":: Environment variable '%s' is not set.\n", last_process_var)
+				os.Exit(1)
+			}
+			fmt.Printf("%s", replLine(line))
 		}
 	})
 }

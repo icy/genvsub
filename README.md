@@ -8,6 +8,12 @@ template engine for your shell scripts ;)
 
 ## Usage
 
+## Supported options
+
+* `-v` : Scan and output ocurrences of variables in the input
+* `-set-u`: Raise error when environment variable is not set.
+  This option doesn't work when `-v` is used.
+
 ### Go version
 
 The program works with `STDIN` and write their output to `STDOUT`
