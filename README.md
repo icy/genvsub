@@ -22,6 +22,8 @@ The program works with `STDIN` and write their output to `STDOUT`
 
 The usage is almost the same.
 
+    $ echo 'My home is ${HOME}' | ./sub.rb
+
 ## References
 
 Original tool:
