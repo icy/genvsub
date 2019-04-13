@@ -67,11 +67,11 @@ func main() {
 				}
 			}
 		} else {
+			fmt.Printf("%s", replLine(line))
 			if setMinusU && !all_var_is_set {
 				fmt.Fprintf(os.Stderr, ":: Environment variable '%s' is not set.\n", last_process_var)
 				os.Exit(1)
 			}
-			fmt.Printf("%s", replLine(line))
 		}
 	})
 }
