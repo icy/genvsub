@@ -20,6 +20,7 @@ The program works with `STDIN` and write their output to `STDOUT`
 
 ### Ruby version
 
+The usage is almost the same.
 
 ## References
 
