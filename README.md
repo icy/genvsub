@@ -8,6 +8,8 @@ template engine for your shell scripts ;)
 
 ## Usage
 
+### Go version
+
 The program works with `STDIN` and write their output to `STDOUT`
 
     $ go get -d
@@ -15,6 +17,9 @@ The program works with `STDIN` and write their output to `STDOUT`
     $ echo 'My home is $HOME'   | ./envsubst
     $ echo 'My home is ${HOME}' | ./envsubst
     $ echo 'Raise error with unset variable ${XXHOME}' | ./envsubst -set-u
+
+### Ruby version
+
 
 ## References
 
