@@ -7,20 +7,20 @@ build:
 .PHONY: tests
 tests:
 	@echo ":: Showing help message"
-	./envsubst --help || true
+	./genvsub --help || true
 
 	@echo ":: Good testing, accept non-set variables."
-	./envsubst < tests/test.yaml
+	./genvsub < tests/test.yaml
 
 	@echo ":: Scanning..."
-	./envsubst -v < tests/test.yaml
+	./genvsub -v < tests/test.yaml
 
 	@echo ":: Set-u, good input and good output."
 	JIRA_USER_NAME=username \
 		JIRA_USER_PASSWORD=password \
-		./envsubst -u < tests/test.yaml
+		./genvsub -u < tests/test.yaml
 
 	@echo ":: Good testing, should raise error when there is non-set variable."
-	./envsubst --u < tests/test.yaml || true
+	./genvsub --u < tests/test.yaml || true
 
 	@echo ":: All tests passed, right?"

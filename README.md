@@ -20,9 +20,9 @@ The program works with `STDIN` and write their output to `STDOUT`
 
     $ go get -d
     $ go build
-    $ echo 'My home is $HOME'   | ./envsubst
-    $ echo 'My home is ${HOME}' | ./envsubst
-    $ echo 'Raise error with unset variable ${XXHOME}' | ./envsubst -set-u
+    $ echo 'My home is $HOME'   | ./genvsub
+    $ echo 'My home is ${HOME}' | ./genvsub
+    $ echo 'Raise error with unset variable ${XXHOME}' | ./genvsub -u
 
 ### Ruby version
 
