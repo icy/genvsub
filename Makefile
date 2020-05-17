@@ -7,3 +7,6 @@ build:
 .PHONY: tests
 tests:
 	./tests/test.sh
+
+.PHONY: all
+all: build tests

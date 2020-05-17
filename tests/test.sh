@@ -39,6 +39,11 @@ test_scanning() {
   [[ "$G_ERRORS" -eq 0 ]]
 }
 
+test_scanning_with_prefix() {
+  genvsub -v -p TEST_ < tests/test.yaml > tests/output.tmp
+  _grep "JIRA_USER_PASSWORD"
+}
+
 # Don't raise error if all variables are set
 test_set_u_all_fine() {
   export JIRA_USER_NAME=foo
@@ -69,7 +74,7 @@ test_set_u_set_empty() {
   [[ "$G_ERRORS" -eq 0 ]]
 }
 
-test_prefix_same_as_test_set_u_undefined() {
+test_prefix_test_simple() {
   unset JIRA_USER_NAME
   export JIRA_USER_PASSWORD=bar
   ./genvsub -u -p JIRA_USER < tests/test.yaml > tests/output.tmp
@@ -98,9 +103,13 @@ test_change_prefix() {
 
 _test() {
   expected="$1"; shift
+  command="$1"; shift
 
-  echo >&2 ":: Test: ${*}"
-  "${@}"
+  echo >&2 ":: --------------------------------------------------------"
+  echo >&2 ":: Test: ${command}"
+  echo >&2 ":: Description: $*"
+  echo >&2 ":: --------------------------------------------------------"
+  "${command}"
 
   if [[ $? -eq "$expected" ]]; then
     echo >&2 ": PASS: ${*}"
@@ -111,14 +120,15 @@ _test() {
 }
 
 test_all() {
-  _test 2 test_help
-  _test 0 test_default
-  _test 0 test_scanning
-  _test 0 test_set_u_all_fine
-  _test 1 test_set_u_undefined
-  _test 0 test_set_u_set_empty
-  _test 1 test_prefix_same_as_test_set_u_undefined
-  _test 0 test_change_prefix
+  _test 2 test_help                 "Show the help message, and exit code > 0"
+  _test 0 test_default              "Default action, not error would raise. Don't use this :)"
+  _test 0 test_scanning             "Print a list of variables that need to be change"
+  _test 1 test_scanning_with_prefix "Scanning, but prefix doesn't catch any variable"
+  _test 0 test_set_u_all_fine       "Set -u, with all variables defined in the environment"
+  _test 1 test_set_u_undefined      "Set -u, with some unset variable"
+  _test 0 test_set_u_set_empty      "Set -u, with some variable defined and set to empty string"
+  _test 1 test_prefix_test_simple   "Use prefix, with the same set of variables as 'test_set_u_all_fine'"
+  _test 0 test_change_prefix        "Use prefix and no variable from the input can match them."
 }
 
 ## main routine
@@ -126,5 +136,8 @@ test_all() {
 export PATH="$(pwd -P)":$PATH
 FAILS=0
 test_all
-echo ":: $FAILS test(s) failed."
+echo >&2 ":: --------------------------------------------------------"
+echo >&2 ":: $FAILS test(s) failed."
+echo >&2 ":: --------------------------------------------------------"
+
 [[ "$FAILS" -eq 0 ]]
