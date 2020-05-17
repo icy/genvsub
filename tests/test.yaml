@@ -3,7 +3,7 @@
     active: true
     commit_events: false
     merge_requests_events: true
-    url: https://jiri.jamba.net
+    url: https://example.net
     username: "${JIRA_USER_NAME}"
     password: "${JIRA_USER_PASSWORD}"
     ignore: "$JIRA_USER_NAME"

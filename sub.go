@@ -18,7 +18,7 @@ import "bufio"
 import "flag"
 
 /* internal global controllers */
-var regVarname = regexp.MustCompile(`\${[^}]+}`)
+var regVarname = regexp.MustCompile(`.+`)
 var allVarSet = true
 var lastProcessedVar = ""
 
@@ -84,7 +84,11 @@ func main() {
 	flag.BoolVar(&scanOnly, "v", false, "Output ocurrences of variables in input.")
 	flag.StringVar(&varPrefix, "p", "", "Limit substitution to variables that match this prefix.")
 	flag.CommandLine.Parse(os.Args[1:])
-	regVarname = regexp.MustCompile(fmt.Sprintf("\\${%s[^}]+}", varPrefix))
+	if len(varPrefix) > 0 {
+		regVarname = regexp.MustCompile(fmt.Sprintf(`\${%s[^}]*}`, varPrefix))
+	} else {
+		regVarname = regexp.MustCompile(`\${[^}]+}`)
+	}
 	fmt.Fprintf(os.Stderr, ":: genvsub is reading from STDIN and looking for variables with regexp '%s'\n", regVarname)
 	eachLine(os.Stdin, doLine)
 }
