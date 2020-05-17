@@ -83,7 +83,7 @@ test_prefix_test_simple() {
 test_prefix_test_complex() {
   export JIRA_USER_NAME=foo
   export JIRA_USER_PASSWORD=bar
-  ./genvsub -u -p 'JIRA_USER_(NAME|PASSWOROD)' \
+  ./genvsub -u -p 'JIRA_USER_(NAME|PASSWORD)' \
     < tests/test.yaml > tests/output.tmp
   G_ERRORS="$?"
   _grep "username: \"foo\""
