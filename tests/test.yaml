@@ -1,0 +1,9 @@
+.services:
+  jira: &services_jira
+    active: true
+    commit_events: false
+    merge_requests_events: true
+    url: https://jiri.jamba.net
+    username: "${JIRA_USER_NAME}"
+    password: "${JIRA_USER_PASSWORD}"
+    jira_issue_transition_id: 61

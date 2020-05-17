@@ -1,0 +1,19 @@
+name: icy
+
+on:
+  push:
+    branches-ignore:
+    - nothing-does-matter
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [ '1.13', '1.12']
+    steps:
+    - uses: actions/checkout@v2
+    - name: smoke
+      run: |
+        set -ex
+        make tests

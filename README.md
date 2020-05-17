@@ -11,8 +11,8 @@ template engine for your shell scripts ;)
 ## Supported options
 
 * `-v` : Scan and output ocurrences of variables in the input
-* `-set-u`: Raise error when environment variable is not set.
-  This option doesn't work when `-v` is used.
+* `-u`: Raise error when environment variable is not set.
+        This option doesn't work when `-v` is used.
 
 ### Go version
 
@@ -30,13 +30,19 @@ The usage is almost the same.
 
     $ echo 'My home is ${HOME}' | ./sub.rb
 
+*WARNING*: The `Ruby` version is written for a reference purpose.
+It's not well maintained. Please don't rely on it.
+
 ## References
 
 Original tool:
   https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html
 
-Similar tool:
-  https://github.com/a8m/envsubst
+Similar tools:
+
+- [ ] https://github.com/a8m/envsubst
+- [ ] https://github.com/gdvalle/envsub (introduce new syntax `%VAR%`,
+      which can be refined with `ENVSUB_PREFIX=%` and `ENVSUB_SUFFIX=%`)
 
 ## License
 
