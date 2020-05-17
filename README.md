@@ -5,6 +5,8 @@ and can *raise error* if any environment is not set.
 There are two kinds of format string `$FOO` and `${FOO}`.
 This tool only works with the later form and can serve a simple
 template engine for your shell scripts ;)
+The program can also limit its action to a small set of variables
+whose names match a predefined prefix.
 
 ## TOC
 
