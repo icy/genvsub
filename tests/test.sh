@@ -69,6 +69,22 @@ test_set_u_set_empty() {
   [[ "$G_ERRORS" -eq 0 ]]
 }
 
+test_prefix_same_as_test_set_u_undefined() {
+  unset JIRA_USER_NAME
+  export JIRA_USER_PASSWORD=bar
+  ./genvsub -u -p JIRA_USER < tests/test.yaml > tests/output.tmp
+}
+
+test_change_prefix() {
+  unset JIRA_USER_NAME
+  export JIRA_USER_PASSWORD=bar
+  ./genvsub -u -p "SKIP_ME_" < tests/test.yaml > tests/output.tmp
+  G_ERRORS="$?"
+  _grep "username: \"[\\$]{JIRA_USER_NAME}\""
+  _grep "password: \"[\\$]{JIRA_USER_PASSWORD}\""
+  [[ "${G_ERRORS}" -eq 0 ]]
+}
+
 #	@echo ":: Set-u, good input and good output."
 #	JIRA_USER_NAME=foo \
 #		JIRA_USER_PASSWORD=bar \
@@ -101,6 +117,8 @@ test_all() {
   _test 0 test_set_u_all_fine
   _test 1 test_set_u_undefined
   _test 0 test_set_u_set_empty
+  _test 1 test_prefix_same_as_test_set_u_undefined
+  _test 0 test_change_prefix
 }
 
 ## main routine
