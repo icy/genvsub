@@ -80,6 +80,17 @@ test_prefix_test_simple() {
   ./genvsub -u -p JIRA_USER < tests/test.yaml > tests/output.tmp
 }
 
+test_prefix_test_complex() {
+  export JIRA_USER_NAME=foo
+  export JIRA_USER_PASSWORD=bar
+  ./genvsub -u -p 'JIRA_USER_(NAME|PASSWOROD)' \
+    < tests/test.yaml > tests/output.tmp
+  G_ERRORS="$?"
+  _grep "username: \"foo\""
+  _grep "password: \"bar\""
+  [[ "$G_ERRORS" -eq 0 ]]
+}
+
 test_change_prefix() {
   unset JIRA_USER_NAME
   export JIRA_USER_PASSWORD=bar
@@ -128,6 +139,7 @@ test_all() {
   _test 1 test_set_u_undefined      "Set -u, with some unset variable"
   _test 0 test_set_u_set_empty      "Set -u, with some variable defined and set to empty string"
   _test 1 test_prefix_test_simple   "Use prefix, with the same set of variables as 'test_set_u_all_fine'"
+  _test 1 test_prefix_test_complex  "Use prefix with not-so-simple regular expression"
   _test 0 test_change_prefix        "Use prefix and no variable from the input can match them."
 }
 

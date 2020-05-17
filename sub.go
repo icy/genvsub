@@ -19,13 +19,13 @@ import "flag"
 
 /* internal global controllers */
 var regVarname = regexp.MustCompile(`\${[^}]+}`)
-var varPrefix = ""
 var allVarSet = true
 var lastProcessedVar = ""
 
 /* users' controllers */
 var setMinusU bool
 var scanOnly bool
+var varPrefix = ""
 
 // Internal function that replaces ${VAR_NAME} with environment value.
 func repl_func(in []byte) []byte {
@@ -85,6 +85,6 @@ func main() {
 	flag.StringVar(&varPrefix, "p", "", "Limit substitution to variables that match this prefix.")
 	flag.CommandLine.Parse(os.Args[1:])
 	regVarname = regexp.MustCompile(fmt.Sprintf("\\${%s[^}]+}", varPrefix))
-	fmt.Fprintf(os.Stderr, ":: Reading from STDIN and looking for variables with regexp '%s'\n", regVarname)
+	fmt.Fprintf(os.Stderr, ":: genvsub is reading from STDIN and looking for variables with regexp '%s'\n", regVarname)
 	eachLine(os.Stdin, doLine)
 }
