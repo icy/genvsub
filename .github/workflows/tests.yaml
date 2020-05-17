@@ -16,4 +16,5 @@ jobs:
     - name: smoke
       run: |
         set -ex
+        make build
         make tests
