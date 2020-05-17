@@ -27,6 +27,7 @@ whose names match a predefined prefix.
 * `-u`: Raise error when environment variable is not set.
         This option doesn't work when `-v` is used.
 * `-p string`: Limit substitution to variables that match this prefix.
+        You can use some regular expression as prefix.
 
 It's highly recommended to use `-u` option. It's the original idea
 why this tool was written.
@@ -44,6 +45,7 @@ To limit substitution to variables that match some prefix, use `-p` option:
 
     $ echo 'var=${TEST_VAR}' | ./genvsub -u -p SAFE_
     var=${TEST_VAR}
+
     $ echo '${TEST_VAR}' | ./genvsub -u -p TEST_
     :: Reading from STDIN and looking for variables with regexp '\${TEST_[^}]+}'
     var=
