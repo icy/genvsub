@@ -6,4 +6,5 @@
     url: https://jiri.jamba.net
     username: "${JIRA_USER_NAME}"
     password: "${JIRA_USER_PASSWORD}"
+    ignore: "$JIRA_USER_NAME"
     jira_issue_transition_id: 61

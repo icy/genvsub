@@ -26,8 +26,8 @@ var last_process_var = ""
 var setMinusU bool
 var scanOnly bool
 
-// Replace ${VAR_NAME} with its environment value
-func repl(in []byte) []byte {
+// Internal function that replaces ${VAR_NAME} with environment value.
+func repl_func(in []byte) []byte {
 	in_st := string(in)
 	var_name := in_st[2 : len(in_st)-1]
 	var_val, var_set := os.LookupEnv(var_name)
@@ -37,6 +37,7 @@ func repl(in []byte) []byte {
 }
 
 // https://github.com/jprichardson/readline-go/blob/master/readline.go
+// Invoke function `f` on each each line from the reader.
 func eachLine(reader io.Reader, f func(string)) {
 	buf := bufio.NewReader(reader)
 	line, err := buf.ReadBytes('\n')
@@ -48,10 +49,14 @@ func eachLine(reader io.Reader, f func(string)) {
 }
 
 func replLine(input string) []byte {
-	output := re.ReplaceAllFunc([]byte(input), repl)
+	output := re.ReplaceAllFunc([]byte(input), repl_func)
 	return output
 }
 
+/*
+  Scan the line and find all variable names match our regular expression.
+  Only used when `scanOnly` option is instructed.
+*/
 func scanLine(input string) [][]byte {
 	output := re.FindAll([]byte(input), -1)
 	return output
@@ -77,5 +82,6 @@ func main() {
 	flag.BoolVar(&setMinusU, "u", false, "Raise error when some variable is not set.")
 	flag.BoolVar(&scanOnly, "v", false, "Output ocurrences of variables in input.")
 	flag.CommandLine.Parse(os.Args[1:])
+  fmt.Fprintf(os.Stderr, ":: Reading from STDIN...\n");
 	eachLine(os.Stdin, doLine)
 }
