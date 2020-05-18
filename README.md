@@ -134,14 +134,16 @@ It's not well maintained. Please don't rely on it.
 
 - [ ] Original tool: https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html
     (which can't raise error if some variable is not set.)
-- [ ] https://github.com/a8m/envsubst (Go tool; It tries to behave like Bash with some
+- [ ] https://github.com/a8m/envsubst : A Go tool; It tries to behave like Bash with some
      advanced feature dealing with empty/non-set/default values
      https://github.com/a8m/envsubst#docs; it can also raise error if some variable
-     is empty and/or not-set)
-- [ ] https://github.com/gdvalle/envsub (Rust tool; It introduces new syntax `%VAR%`,
+     is empty and/or not-set. This tool has a few features that I don't need,
+     and at the same time it doesn't have some features I need (reg-exp variable name
+     filer, strict variable name format.)
+- [ ] https://github.com/gdvalle/envsub : A Rust tool; It introduces new syntax `%VAR%`,
       which can be refined with `ENVSUB_PREFIX=%` and `ENVSUB_SUFFIX=%`.
       When hitting unset variables it will exit rather than expanding as empty strings. 
-      It also fully buffers input before writing, so in-place replacement is possible.)
+      It also fully buffers input before writing, so in-place replacement is possible.
 
 ## License
 
