@@ -139,7 +139,7 @@ It's not well maintained. Please don't rely on it.
      https://github.com/a8m/envsubst#docs; it can also raise error if some variable
      is empty and/or not-set. This tool has a few features that I don't need,
      and at the same time it doesn't have some features I need (reg-exp variable name
-     filer, strict variable name format.)
+     filter, strict variable naming format, bla bla)
 - [ ] https://github.com/gdvalle/envsub : A Rust tool; It introduces new syntax `%VAR%`,
       which can be refined with `ENVSUB_PREFIX=%` and `ENVSUB_SUFFIX=%`.
       When hitting unset variables it will exit rather than expanding as empty strings. 
