@@ -89,9 +89,9 @@ Now there are a few options,
       when it can encrypt part of the `yaml` file, but it also requires all other parts
       of the file to be required via `sops`. And maintain the exact file path for sops
       is not an easy task.
-- [ ] We modify AlertManager (operator) to feed themself with some secrets from
+- [ ] We modify AlertManager (operator) to feed them with some secrets from
       the runtime environment. Well, we are talking about modifying upstream project,
-      about the sidecar... It's the best (see also
+      about the sidecar... It's the best way (see also
       https://github.com/bitnami-labs/sealed-secrets/tree/master/docs/examples/config-template#injecting-secrets-in-config-file-templates)
       but we can't just do that, can we?
 - [ ] We store this whole configuration file for alertmanager in `s3`, and pull them
@@ -101,9 +101,9 @@ Now there are a few options,
 - [ ] We build a fake `configSecret` with sample values, and modify the file
       at build time with our actual values.
 
-The last option, we build some sample onfiguration file, and modify them at the build time
+In the last option we build some sample onfiguration file, and modify them at the build time
 with cli args or env variables. We accept side-effects, but we don't build another DSL
-and/or another template language atop of Kustomization or k8s manifests: The world is just
+and/or another template language atop Kustomization or k8s manifests: The world is just
 a mess already. 
 
 This tool may be an answer :)
