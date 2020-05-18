@@ -13,6 +13,11 @@ whose names match a predefined prefix.
 * [Usage](#usage)
   * [Supported options](#supported-options)
   * [Installation. Examples](#installation-examples)
+* [Problems](#problems)
+  * [Kustomization](#kustomization)
+  * [Helm or Terraform](#helm-or-terraform)
+  * TODO: [Sops](#sops)
+  * TODO: [Git-secret or Git-crypt](#get-secret-or-git-crypt)
 * [Development](#development)
   * [Smoke tests](#smoke-tests)
   * [Ruby version](#ruby-version)
@@ -53,6 +58,55 @@ To limit substitution to variables that match some prefix, use `-p` option:
 
 The second command raises an error because the variable `TEST_VAR` matches
 the expected prefix `TEST_` and its value is not set.
+
+## Problems
+
+### Kustomization
+
+`kustomization` doesn't like to support build-time side-effects from CLI args/ or env variables.
+See the explanation: https://github.com/kubernetes-sigs/kustomize/blob/master/docs/eschewedFeatures.md#build-time-side-effects-from-cli-args-or-env-variables .
+They provide subcommand `kustomize edit` as an alternative, however that doesn't work
+with  all kind of changes you want to apply for your manifest files. `edit` command
+doesn't have better support than `patch` file, and the `patch` file has already some
+limitation.
+
+What if we really want to have some side-effects from CLI args/ or env variables? 
+For example, we want to provide some API token to alertmanager, which is deployed thanks 
+to `prometheus-operator`? You may ask why we need that. Okay, the explanation is below.
+
+The main configuration part of `alertmanager` is described in yaml syntax , i.e.,
+https://github.com/prometheus/alertmanager/blob/master/doc/examples/simple.yml
+and this whole configuration part is just `configSecret` resource in `prometheus-operator`
+as mentioned in the specification:
+https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#alertmanagerspec
+
+Now there are a few options,
+
+- [ ] In git repository, we encrypt the whole configuration file for Alertmanager,
+      and use `secretGenerator` to load them to `configSecret`. There are a few 
+      tools to do this: `git-secret`, `git-crypt`, `sops`. All of them just bring
+      a nightmare to the pull request review process. `ops` can be the best candidate
+      when it can encrypt part of the `yaml` file, but it also requires all other parts
+      of the file to be required via `sops`. And maintain the exact file path for sops
+      is not an easy task.
+- [ ] We modify AlertManager (operator) to feed themself with some secrets from
+      the runtime environment. Well, we are talking about modifying upstream project,
+      about the sidecar... It's the best (see also
+      https://github.com/bitnami-labs/sealed-secrets/tree/master/docs/examples/config-template#injecting-secrets-in-config-file-templates)
+      but we can't just do that, can we?
+- [ ] We store this whole configuration file for alertmanager in `s3`, and pull them
+      at build time. There is no way to review the changes, there will be some surprise
+      when a wrong configuration is used a right purpose. `s3` has revisions, but
+      no reference support (it isn't another git, is it?)
+- [ ] We build a fake `configSecret` with sample values, and modify the file
+      at build time with our actual values.
+
+The last option, we build some sample onfiguration file, and modify them at the build time
+with cli args or env variables. We accept side-effects, but we don't build another DSL
+and/or another template language atop of Kustomization or k8s manifests: The world is just
+a mess already. 
+
+This tool may be an answer :)
 
 ## Development
 
