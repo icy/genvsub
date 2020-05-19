@@ -61,6 +61,9 @@ the expected prefix `TEST_` and its value is not set.
 
 ## Problems
 
+In this section, we mainly discuss how we want to have secret/credentials in
+git repository and our template/manifests/whatever (configuration) files.
+
 ### Kustomization
 
 `kustomization` doesn't like to support build-time side-effects from CLI args/ or env variables.
@@ -114,6 +117,52 @@ $ kustomize build | genvsub -f variable_file | kubectl apply -f-
 
 Yummy! It's another part of the pipe. As `genvsub` can limit the scope of side-effects,
 we can control the risk and have a manageable flow.
+
+## Helm or Terraform
+
+Both `helm` and `terraform` are complex, and discussing how they work is not a very-long-topic.
+Though serving different purporses and solving different problems, they all share the same
+idea: They allow engineers to describe some custom logic, and control the code with
+some additional (control) variables, and yep, varibales can be from build/run time
+environment. That means they are very flexible dealing with side-effects
+
+```
+$ terraform plan -var-file=custom.tfvars
+$ helm install --values ./custom_1.yaml --values ./custom_2.yaml
+```
+
+It isn't clear if they can support `STDIN` as a regular value file, but basically we can use
+`genvsub` to resolve our issue (what's the issue? it's to have some credentials in `helm`
+`values.yaml` file, or some terraform DSL files.)
+
+```
+$ < input.secret genvsub > custom_helm_with_credentials.tfvars
+$ terraform plan -var-file=custom_helm_with_credentials.tfvars
+$ shred custom_helm_with_credentials.tfvars # FIXME: this won't work!
+
+$ < input.secret genvsub > custom_helm_with_credentials.vars
+$ helm install -values ./custom_helm_with_credentials.vars
+$ shred custom_helm_with_credentials # FIXME: this won't work!
+```
+
+Well, you may ask why we just use some `helm plugin`, or `terraform provider` instead?
+Yes, we can. `terraform` has some provider to deal with external secrets,
+and `helm` also has some plugin that features the same thing. They can solve
+the problem. You can use. And using `genvsub` is an alternative.
+
+Helm engineers solve Helm issue, Terraform engineers solve Terraform engineer. 
+Why don't they just accept side-effects and both use environment variables instead? 
+
+Please note that, in `Helm` `values.yaml`, you can refer to another variable.
+When using some helm charts, you likely write down all hard-coded strings in `values.yaml`
+file, or you write another template atop of the standard helm charts (lolz),
+or you have some wrapper atop (for example, see `helm-secrets` by Zendeks below)
+
+See also
+
+- Helm plugin: https://github.com/zendesk/helm-secrets
+- Terraform provider: https://github.com/carlpett/terraform-provider-sops
+- Terraform ssm_parameter provider: https://www.terraform.io/docs/providers/aws/r/ssm_parameter.html
 
 ## Development
 
