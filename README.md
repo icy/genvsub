@@ -120,6 +120,11 @@ we can control the risk and have a manageable flow.
 
 ## Helm or Terraform
 
+Before we go further, please note as in the previous section [Kusotmization](#kustomization),
+we don't really like the idea to encrypt the whole file with `git-secret`, `git-crypt` or `sops`,
+because that makes the reviewing process harder. We want to see plain text file as plain text
+file, and we also want to modify them quickly/easily.
+
 Both `helm` and `terraform` are complex, and discussing how they work is not a not-so-long-topic.
 Though serving different purporses and solving different problems, they all share the same
 idea: They allow engineers to describe some custom logic, and control the code with
@@ -147,11 +152,11 @@ $ shred custom_helm_with_credentials.vars # FIXME: this won't work!
 
 Well, you may ask why we just use some `helm plugin`, or `terraform provider` instead?
 Yes, we can. `terraform` has some provider to deal with external secrets,
-and `helm` also has some plugin that features the same thing. They can solve
-the problem. You can use. And using `genvsub` is an alternative.
+and `helm` may have some plugin that features the same thing.
+They can solve the problem. You can use. And using `genvsub` is an alternative.
 
 Helm engineers solve Helm issue, Terraform engineers solve Terraform engineer. 
-Why don't we just accept side-effects and both use environment variables instead?
+Why don't we just accept side-effects and both use environment variables instead:)
 
 Please note that, in `Helm` `values.yaml`, you can't refer to another variable.
 When using some helm charts, you likely write down all hard-coded strings in `values.yaml`
