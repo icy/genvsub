@@ -106,7 +106,14 @@ with cli args or env variables. We accept side-effects, but we don't build anoth
 and/or another template language atop Kustomization or k8s manifests: The world is just
 a mess already. 
 
-This tool may be an answer :)
+This tool may be an answer. By accepting not-so-many side-effects, we can easily archive the goal:
+
+```
+$ kustomize build | genvsub -f variable_file | kubectl apply -f-
+```
+
+Yummy! It's another part of the pipe. As `genvsub` can limit the scope of side-effects,
+we can control the risk and have a manageable flow.
 
 ## Development
 
