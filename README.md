@@ -151,7 +151,7 @@ and `helm` also has some plugin that features the same thing. They can solve
 the problem. You can use. And using `genvsub` is an alternative.
 
 Helm engineers solve Helm issue, Terraform engineers solve Terraform engineer. 
-Why don't they just accept side-effects and both use environment variables instead? 
+Why don't we just accept side-effects and both use environment variables instead?
 
 Please note that, in `Helm` `values.yaml`, you can't refer to another variable.
 When using some helm charts, you likely write down all hard-coded strings in `values.yaml`
