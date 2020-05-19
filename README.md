@@ -123,7 +123,7 @@ we can control the risk and have a manageable flow.
 Both `helm` and `terraform` are complex, and discussing how they work is not a not-so-long-topic.
 Though serving different purporses and solving different problems, they all share the same
 idea: They allow engineers to describe some custom logic, and control the code with
-some additional (control) variables, and yep, varibales can be from build/run time
+some additional (control) variables, and yep, variables can be from build/run time
 environment. That means they are very flexible dealing with side-effects
 
 ```
@@ -142,7 +142,7 @@ $ shred custom_helm_with_credentials.tfvars # FIXME: this won't work!
 
 $ < input.secret genvsub > custom_helm_with_credentials.vars
 $ helm install -values ./custom_helm_with_credentials.vars
-$ shred custom_helm_with_credentials # FIXME: this won't work!
+$ shred custom_helm_with_credentials.vars # FIXME: this won't work!
 ```
 
 Well, you may ask why we just use some `helm plugin`, or `terraform provider` instead?
@@ -153,9 +153,9 @@ the problem. You can use. And using `genvsub` is an alternative.
 Helm engineers solve Helm issue, Terraform engineers solve Terraform engineer. 
 Why don't they just accept side-effects and both use environment variables instead? 
 
-Please note that, in `Helm` `values.yaml`, you can refer to another variable.
+Please note that, in `Helm` `values.yaml`, you can't refer to another variable.
 When using some helm charts, you likely write down all hard-coded strings in `values.yaml`
-file, or you write another template atop of the standard helm charts (lolz),
+file, or you write another template atop the standard helm charts (lolz),
 or you have some wrapper atop (for example, see `helm-secrets` by Zendeks below)
 
 See also
