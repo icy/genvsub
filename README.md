@@ -156,7 +156,7 @@ Why don't they just accept side-effects and both use environment variables inste
 Please note that, in `Helm` `values.yaml`, you can't refer to another variable.
 When using some helm charts, you likely write down all hard-coded strings in `values.yaml`
 file, or you write another template atop the standard helm charts (lolz),
-or you have some wrapper atop (for example, see `helm-secrets` by Zendeks below)
+or you have some wrapper atop (for example, see `helm-secrets` by Zendesk below)
 
 See also
 
