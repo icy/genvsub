@@ -120,7 +120,7 @@ we can control the risk and have a manageable flow.
 
 ## Helm or Terraform
 
-Both `helm` and `terraform` are complex, and discussing how they work is not a very-long-topic.
+Both `helm` and `terraform` are complex, and discussing how they work is not a not-so-long-topic.
 Though serving different purporses and solving different problems, they all share the same
 idea: They allow engineers to describe some custom logic, and control the code with
 some additional (control) variables, and yep, varibales can be from build/run time
