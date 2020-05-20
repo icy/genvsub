@@ -41,9 +41,12 @@ why this tool was written.
 
 ### Installation. Examples
 
-The program works with `STDIN` and write their output to `STDOUT`
+To install on your laptop, please try the popular way
 
     $ go get -v github.com/icy/genvsub
+
+The program works with `STDIN` and write their output to `STDOUT`
+
     $ echo 'My home is $HOME'   | ./genvsub
     $ echo 'My home is ${HOME}' | ./genvsub
     $ echo 'Raise error with unset variable ${XXHOME}' | ./genvsub -u
