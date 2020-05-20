@@ -101,6 +101,17 @@ test_prefix_test_complex() {
   [[ "$G_ERRORS" -eq 0 ]]
 }
 
+test_prefix_test_complexv() {
+  unset JIRA_USER_NAME
+  unset JIRA_USER_PASSWORD
+  ./genvsub -u -v -p 'JIRA_USER_NAME|JIRA_USER_PASSWORD' \
+    < tests/test.yaml > tests/output.tmp
+  G_ERRORS="$?"
+  _grep "^JIRA_USER_NAME"
+  _grep "^JIRA_USER_PASSWORD"
+  [[ "$G_ERRORS" -eq 0 ]]
+}
+
 test_change_prefix() {
   unset JIRA_USER_NAME
   export JIRA_USER_PASSWORD=bar
@@ -150,6 +161,7 @@ test_all() {
   _test test_set_u_set_empty      "Set -u, with some variable defined and set to empty string"
   _test test_prefix_test_simple   "Use prefix, with the same set of variables as 'test_set_u_all_fine'"
   _test test_prefix_test_complex  "Use prefix with not-so-simple regular expression"
+  _test test_prefix_test_complexv "Use prefix with not-so-simple regular expression (Just print, don't do anything)"
   _test test_change_prefix        "Use prefix and no variable from the input can match them."
 }
 
