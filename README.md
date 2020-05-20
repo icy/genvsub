@@ -62,6 +62,10 @@ To limit substitution to variables that match some prefix, use `-p` option:
 The second command raises an error because the variable `TEST_VAR` matches
 the expected prefix `TEST_` and its value is not set.
 
+You can also specify exactly a few variables to be substituted
+
+    $ echo '${TEST_VAR}' | ./genvsub -u -p 'VAR_NAME_3|VAR_NAME_3|VAR_NAME_3'
+
 ### Note on variable prefix
 
 When using `-p string` to specify the variable prefix, you can also use
