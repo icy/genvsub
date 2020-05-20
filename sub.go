@@ -30,8 +30,27 @@ var varPrefix = ""
 // Internal function that replaces ${VAR_NAME} with environment value.
 func repl_func(in []byte) []byte {
 	in_st := string(in)
+	// FIXME: Expecting variable in the form `${FOO_BAR}`.
+	// When user provides some regexp with `-p prefix`, this can be tricky.
+	if 2 > len(in_st)-1 {
+		var_set := false
+		allVarSet = allVarSet && var_set
+		var_val := fmt.Sprintf("<%s::error::invalid_input_length>", in_st)
+		return []byte(var_val)
+	}
+
+	if in_st[0:2] != "${" || in_st[len(in_st)-1:len(in_st)] != "}" {
+		var_set := false
+		allVarSet = allVarSet && var_set
+		var_val := fmt.Sprintf("<%s::error::invalid_input_regexp>", in_st)
+		return []byte(var_val)
+	}
+
 	var_name := in_st[2 : len(in_st)-1]
 	var_val, var_set := os.LookupEnv(var_name)
+	if !var_set {
+		var_val = fmt.Sprintf("<%s::error::variable_unset>", var_name)
+	}
 	allVarSet = allVarSet && var_set
 	lastProcessedVar = var_name
 	return []byte(var_val)
@@ -82,13 +101,9 @@ func doLine(line string) {
 func main() {
 	flag.BoolVar(&setMinusU, "u", false, "Raise error when some variable is not set.")
 	flag.BoolVar(&scanOnly, "v", false, "Output ocurrences of variables in input.")
-	flag.StringVar(&varPrefix, "p", "", "Limit substitution to variables that match this prefix.")
+	flag.StringVar(&varPrefix, "p", "[^}]+", "Limit substitution to variables that match this prefix.")
 	flag.CommandLine.Parse(os.Args[1:])
-	if len(varPrefix) > 0 {
-		regVarname = regexp.MustCompile(fmt.Sprintf(`\${%s[^}]*}`, varPrefix))
-	} else {
-		regVarname = regexp.MustCompile(`\${[^}]+}`)
-	}
+	regVarname = regexp.MustCompile(fmt.Sprintf(`\${(%s)}`, varPrefix))
 	fmt.Fprintf(os.Stderr, ":: genvsub is reading from STDIN and looking for variables with regexp '%s'\n", regVarname)
 	eachLine(os.Stdin, doLine)
 }

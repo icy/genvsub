@@ -6,13 +6,14 @@ There are two kinds of format string `$FOO` and `${FOO}`.
 This tool only works with the later form and can serve a simple
 template engine for your shell scripts ;)
 The program can also limit its action to a small set of variables
-whose names match a predefined prefix.
+whose names match a predefined prefix/regexp.
 
 ## TOC
 
 * [Usage](#usage)
   * [Supported options](#supported-options)
   * [Installation. Examples](#installation-examples)
+  * [Note on variable prefix](#note-on-variable-prefix)
 * [Problems](#problems)
   * [Kustomization](#kustomization)
   * [Helm or Terraform](#helm-or-terraform)
@@ -31,8 +32,9 @@ whose names match a predefined prefix.
 * `-v` : Scan and output ocurrences of variables in the input
 * `-u`: Raise error when environment variable is not set.
         This option doesn't work when `-v` is used.
-* `-p string`: Limit substitution to variables that match this prefix.
+* `-p regexp`: Limit substitution to variables that match this prefix.
         You can use some regular expression as prefix.
+        Default to `[^}]+`.
 
 It's highly recommended to use `-u` option. It's the original idea
 why this tool was written.
@@ -51,7 +53,7 @@ To limit substitution to variables that match some prefix, use `-p` option:
     $ echo 'var=${TEST_VAR}' | ./genvsub -u -p SAFE_
     var=${TEST_VAR}
 
-    $ echo '${TEST_VAR}' | ./genvsub -u -p TEST_
+    $ echo '${TEST_VAR}' | ./genvsub -u -p 'TEST_.*'
     :: Reading from STDIN and looking for variables with regexp '\${TEST_[^}]+}'
     var=
     :: Environment variable 'TEST_VAR' is not set.
@@ -59,6 +61,15 @@ To limit substitution to variables that match some prefix, use `-p` option:
 The second command raises an error because the variable `TEST_VAR` matches
 the expected prefix `TEST_` and its value is not set.
 
+### Note on variable prefix
+
+When using `-p string` to specify the variable prefix, you can also use
+some simple regular expression. However, please note that for the given
+input argument `-p PREFIX`, the  program will build the final regexp
+`\${(PREFIX)}`.
+
+1. Hence you can't use for example `-p '^FOO'`.
+2. You can also easily trick the program with some fun `PREFIX` ;)
 ## Problems
 
 In this section, we mainly discuss how we want to have secret/credentials in
@@ -73,8 +84,8 @@ with  all kind of changes you want to apply for your manifest files. `edit` comm
 doesn't have better support than `patch` file, and the `patch` file has already some
 limitation.
 
-What if we really want to have some side-effects from CLI args/ or env variables? 
-For example, we want to provide some API token to alertmanager, which is deployed thanks 
+What if we really want to have some side-effects from CLI args/ or env variables?
+For example, we want to provide some API token to alertmanager, which is deployed thanks
 to `prometheus-operator`? You may ask why we need that. Okay, the explanation is below.
 
 The main configuration part of `alertmanager` is described in yaml syntax , i.e.,
@@ -86,7 +97,7 @@ https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#a
 Now there are a few options,
 
 - [ ] In git repository, we encrypt the whole configuration file for Alertmanager,
-      and use `secretGenerator` to load them to `configSecret`. There are a few 
+      and use `secretGenerator` to load them to `configSecret`. There are a few
       tools to do this: `git-secret`, `git-crypt`, `sops`. All of them just bring
       a nightmare to the pull request review process. `ops` can be the best candidate
       when it can encrypt part of the `yaml` file, but it also requires all other parts
@@ -107,7 +118,7 @@ Now there are a few options,
 In the last option we build some sample onfiguration file, and modify them at the build time
 with cli args or env variables. We accept side-effects, but we don't build another DSL
 and/or another template language atop Kustomization or k8s manifests: The world is just
-a mess already. 
+a mess already.
 
 This tool may be an answer. By accepting not-so-many side-effects, we can easily archive the goal:
 
@@ -155,7 +166,7 @@ Yes, we can. `terraform` has some provider to deal with external secrets,
 and `helm` may have some plugin that features the same thing.
 They can solve the problem. You can use. And using `genvsub` is an alternative.
 
-Helm engineers solve Helm issue, Terraform engineers solve Terraform engineer. 
+Helm engineers solve Helm issue, Terraform engineers solve Terraform engineer.
 Why don't we just accept side-effects and both use environment variables instead:)
 
 Please note that, in `Helm` `values.yaml`, you can't refer to another variable.
@@ -203,7 +214,7 @@ It's not well maintained. Please don't rely on it.
      filter, strict variable naming format, bla bla)
 - [ ] https://github.com/gdvalle/envsub : A Rust tool; It introduces new syntax `%VAR%`,
       which can be refined with `ENVSUB_PREFIX=%` and `ENVSUB_SUFFIX=%`.
-      When hitting unset variables it will exit rather than expanding as empty strings. 
+      When hitting unset variables it will exit rather than expanding as empty strings.
       It also fully buffers input before writing, so in-place replacement is possible.
 
 ## License
