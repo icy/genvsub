@@ -122,17 +122,6 @@ test_change_prefix() {
   [[ "${G_ERRORS}" -eq 0 ]]
 }
 
-#	@echo ":: Set-u, good input and good output."
-#	JIRA_USER_NAME=foo \
-#		JIRA_USER_PASSWORD=bar \
-#		./genvsub -u < tests/test.yaml \
-#	 | grep "username: $$JIRA_USER_NAME"
-#
-#	@echo ":: Good testing, should raise error when there is non-set variable."
-#	(./genvsub -u < tests/test.yaml >/dev/null; test $$? -ge 1 ;)
-#
-#	@echo ":: All tests passed, right?"
-
 _test() {
   command="$1"; shift
 
