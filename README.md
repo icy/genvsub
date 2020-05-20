@@ -230,4 +230,4 @@ It's not well maintained. Please don't rely on it.
 ## License
 
 This work is writtedn by Ky-Anh Huynh
-and it's release under a MIT license.
+and it's released under a MIT license.
