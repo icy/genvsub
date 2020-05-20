@@ -34,7 +34,8 @@ whose names match a predefined prefix/regexp.
         This option doesn't work when `-v` is used.
 * `-p regexp`: Limit substitution to variables that match this prefix.
         You can use some regular expression as prefix.
-        Default to `[^}]+`.
+        Default to `[^}]+`. Can be used as an alternative
+        to `SHELL-FORMAT` option in the original GNU `envsubst`
 
 It's highly recommended to use `-u` option. It's the original idea
 why this tool was written.
@@ -65,8 +66,9 @@ To limit substitution to variables that match some prefix, use `-p` option:
 The second command raises an error because the variable `TEST_VAR` matches
 the expected prefix `TEST_` and its value is not set.
 
-You can also specify exactly a few variables to be substituted (which is exactly an alternative
-to the `shell-format` in the original GNU tool `envsubst`:
+You can also specify exactly a few variables to be substituted 
+(which is exactly an alternative to the `shell-format` option
+in the original GNU tool `envsubst`):
 
     $ echo '${TEST_VAR}' | ./genvsub -u -p 'VAR_NAME_3|VAR_NAME_3|VAR_NAME_3'
 
