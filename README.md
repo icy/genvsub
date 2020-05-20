@@ -79,6 +79,7 @@ input argument `-p PREFIX`, the  program will build the final regexp
 
 1. Hence you can't use for example `-p '^FOO'`.
 2. You can also easily trick the program with some fun `PREFIX` ;)
+
 ## Problems
 
 In this section, we mainly discuss how we want to have secret/credentials in
@@ -200,7 +201,7 @@ $ make build tests
 ```
 
 Tests are written in `shell` script.
-Please have a look at [tests/test.sh](tests/test.sh)
+Please have a look at [tests/test.sh](tests/test.sh).
 
 ### Ruby version
 
