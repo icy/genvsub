@@ -50,12 +50,13 @@ The program works with `STDIN` and write their output to `STDOUT`
 
 To limit substitution to variables that match some prefix, use `-p` option:
 
-    $ echo 'var=${TEST_VAR}' | ./genvsub -u -p SAFE_
+    $  echo 'var=${TEST_VAR}' | ./genvsub -u -p SAFE_
+    :: genvsub is reading from STDIN and looking for variables with regexp '\${(SAFE_)}'
     var=${TEST_VAR}
 
     $ echo '${TEST_VAR}' | ./genvsub -u -p 'TEST_.*'
-    :: Reading from STDIN and looking for variables with regexp '\${TEST_[^}]+}'
-    var=
+    :: genvsub is reading from STDIN and looking for variables with regexp '\${(TEST_.*)}'
+    <TEST_VAR::error::variable_unset>
     :: Environment variable 'TEST_VAR' is not set.
 
 The second command raises an error because the variable `TEST_VAR` matches
