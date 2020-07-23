@@ -81,6 +81,10 @@ input argument `-p PREFIX`, the  program will build the final regexp
 
 1. Hence you can't use for example `-p '^FOO'`.
 2. You can also easily trick the program with some fun `PREFIX` ;)
+   However, as seen in 
+   https://github.com/icy/genvsub/blob/33e68048c6fe4b6ca0befadbc9fa5c19055ede8b/sub.go#L42
+   the program enforces input data to follow the form `${VARIABLE_NAME}`.
+   I'm still thinking if we can allow more tricks here.
 
 ## Problems
 
