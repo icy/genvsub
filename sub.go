@@ -30,8 +30,7 @@ var varPrefix = ""
 // Internal function that replaces ${VAR_NAME} with environment value.
 func repl_func(in []byte) []byte {
 	in_st := string(in)
-	// FIXME: Expecting variable in the form `${FOO_BAR}`.
-	// When user provides some regexp with `-p prefix`, this can be tricky.
+	// Ensure that input data is long enough
 	if 2 > len(in_st)-1 {
 		var_set := false
 		allVarSet = allVarSet && var_set
@@ -39,10 +38,14 @@ func repl_func(in []byte) []byte {
 		return []byte(var_val)
 	}
 
+	// FIXME: Expecting variable in the form `${FOO_BAR}`.
+	// FIXME: That means, there is no way to support user form e.g `$<FOO_BAR>`
+	// FIXME: (recall `sed` style?)
+	// When user provides some regexp with `-p prefix`, this can be tricky.
 	if in_st[0:2] != "${" || in_st[len(in_st)-1:len(in_st)] != "}" {
 		var_set := false
 		allVarSet = allVarSet && var_set
-		var_val := fmt.Sprintf("<%s::error::invalid_input_regexp>", in_st)
+		var_val := fmt.Sprintf("<%s::error::invalid_input_data>", in_st)
 		return []byte(var_val)
 	}
 
@@ -103,6 +106,7 @@ func main() {
 	flag.BoolVar(&scanOnly, "v", false, "Output ocurrences of variables in input.")
 	flag.StringVar(&varPrefix, "p", "[^}]+", "Limit substitution to variables that match this prefix.")
 	flag.CommandLine.Parse(os.Args[1:])
+	// FIXME: Does this generate any serious issue at runtime?
 	regVarname = regexp.MustCompile(fmt.Sprintf(`\${(%s)}`, varPrefix))
 	fmt.Fprintf(os.Stderr, ":: genvsub is reading from STDIN and looking for variables with regexp '%s'\n", regVarname)
 	eachLine(os.Stdin, doLine)
