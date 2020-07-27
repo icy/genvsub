@@ -1,3 +1,3 @@
-module github.com/GFG/genvsub
+module github.com/icy/genvsub
 
 go 1.14
