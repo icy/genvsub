@@ -8,3 +8,4 @@
     password: "${JIRA_USER_PASSWORD}"
     ignore: "$JIRA_USER_NAME"
     jira_issue_transition_id: 61
+    both_stuff: "${JIRA_USER_NAME}"+"${JIRA_USER_PASSWORD}"

@@ -11,7 +11,7 @@ test_help() {
 
 # Looking for something from the output file
 _grep() {
-  grep -qsEe "${@}" tests/output.tmp
+  grep -qsEe "${@}" "tests/${FUNCNAME[1]}.tmp"
   if [[ $? -eq 0 ]]; then
     echo >&2 ":: __ Pattern matched in the output: '${@}'"
   else
@@ -24,7 +24,7 @@ _grep() {
 test_default() {
   unset JIRA_USER_NAME
   unset JIRA_USER_PASSWORD
-  genvsub < tests/test.yaml >tests/output.tmp
+  genvsub < tests/test.yaml >"tests/${FUNCNAME[0]}.tmp"
   G_ERRORS=0
   _grep "username: \".*error::variable_unset>\""
   _grep "password: \".*error::variable_unset>\""
@@ -33,7 +33,7 @@ test_default() {
 }
 
 test_scanning() {
-  genvsub -v < tests/test.yaml > tests/output.tmp
+  genvsub -v < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
 }
   G_ERRORS=0
   _grep "^JIRA_USER_NAME"
@@ -41,11 +41,11 @@ test_scanning() {
   [[ "$G_ERRORS" -eq 0 ]]
 
 test_scanning_with_prefix() {
-  genvsub -v -p 'TEST_.*' < tests/test.yaml > tests/output.tmp
-  lc="$(awk 'END{print NR}' < tests/output.tmp)"
+  genvsub -v -p 'TEST_.*' < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
+  lc="$(awk 'END{print NR}' < "tests/${FUNCNAME[0]}.tmp")"
   [[ "$lc" -eq 0 ]] || return 1
 
-  genvsub -v -p 'JIRA_.*' < tests/test.yaml > tests/output.tmp
+  genvsub -v -p 'JIRA_.*' < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
   G_ERRORS=0
   _grep "^JIRA_USER_NAME"
   _grep "^JIRA_USER_PASSWORD"
@@ -56,7 +56,7 @@ test_scanning_with_prefix() {
 test_set_u_all_fine() {
   export JIRA_USER_NAME=foo
   export JIRA_USER_PASSWORD=bar
-  ./genvsub -u < tests/test.yaml > tests/output.tmp
+  ./genvsub -u < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
   G_ERRORS=0
   _grep "username: \"foo\""
   _grep "password: \"bar\""
@@ -67,7 +67,7 @@ test_set_u_all_fine() {
 test_set_u_undefined() {
   unset JIRA_USER_NAME
   export JIRA_USER_PASSWORD=bar
-  ./genvsub -u < tests/test.yaml > tests/output.tmp
+  ./genvsub -u < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
   [[ $? -ge 1 ]]
 }
 
@@ -75,7 +75,7 @@ test_set_u_undefined() {
 test_set_u_set_empty() {
   export JIRA_USER_NAME=
   export JIRA_USER_PASSWORD=bar
-  ./genvsub -u < tests/test.yaml > tests/output.tmp
+  ./genvsub -u < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
   G_ERRORS=$?
   _grep "username: \"\""
   _grep "password: \"bar\""
@@ -86,7 +86,7 @@ test_set_u_set_empty() {
 test_prefix_test_simple() {
   unset JIRA_USER_NAME
   export JIRA_USER_PASSWORD=bar
-  ./genvsub -u -p 'JIRA_USER.*' < tests/test.yaml > tests/output.tmp
+  ./genvsub -u -p 'JIRA_USER.*' < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
   [[ $? -ge 1 ]]
 }
 
@@ -94,7 +94,7 @@ test_prefix_test_complex() {
   export JIRA_USER_NAME=foo
   export JIRA_USER_PASSWORD=bar
   ./genvsub -u -p 'JIRA_USER_NAME|JIRA_USER_PASSWORD' \
-    < tests/test.yaml > tests/output.tmp
+    < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
   G_ERRORS="$?"
   _grep "username: \"foo\""
   _grep "password: \"bar\""
@@ -105,7 +105,7 @@ test_prefix_test_complexv() {
   unset JIRA_USER_NAME
   unset JIRA_USER_PASSWORD
   ./genvsub -u -v -p 'JIRA_USER_NAME|JIRA_USER_PASSWORD' \
-    < tests/test.yaml > tests/output.tmp
+    < tests/test.yaml > tests/${FUNCNAME[0]}.tmp
   G_ERRORS="$?"
   _grep "^JIRA_USER_NAME"
   _grep "^JIRA_USER_PASSWORD"
@@ -115,7 +115,7 @@ test_prefix_test_complexv() {
 test_change_prefix() {
   unset JIRA_USER_NAME
   export JIRA_USER_PASSWORD=bar
-  ./genvsub -u -p 'SKIP_ME_.*' < tests/test.yaml > tests/output.tmp
+  ./genvsub -u -p 'SKIP_ME_.*' < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
   G_ERRORS="$?"
   _grep "username: \"[\\$]{JIRA_USER_NAME}\""
   _grep "password: \"[\\$]{JIRA_USER_PASSWORD}\""
@@ -135,7 +135,7 @@ _test() {
     echo >&2 ": PASS: $command: ${*}"
   else
     (( FAILS++ ))
-    cat "tests/output.tmp"
+    cat "tests/${command}.tmp"
     echo >&2 ":: FAIL: $command: ${*}"
   fi
 }

@@ -1,1 +1,3 @@
 tests/output.tmp
+tests/*.tmp
+genvsub
