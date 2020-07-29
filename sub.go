@@ -35,6 +35,7 @@ func repl_func(in []byte) []byte {
 		var_set := false
 		allVarSet = allVarSet && var_set
 		var_val := fmt.Sprintf("<%s::error::invalid_input_length>", in_st)
+		fmt.Fprintf(os.Stderr, "%s\n", var_val)
 		return []byte(var_val)
 	}
 
@@ -46,6 +47,7 @@ func repl_func(in []byte) []byte {
 		var_set := false
 		allVarSet = allVarSet && var_set
 		var_val := fmt.Sprintf("<%s::error::invalid_input_data>", in_st)
+		fmt.Fprintf(os.Stderr, "%s\n", var_val)
 		return []byte(var_val)
 	}
 
@@ -53,6 +55,7 @@ func repl_func(in []byte) []byte {
 	var_val, var_set := os.LookupEnv(var_name)
 	if !var_set {
 		var_val = fmt.Sprintf("<%s::error::variable_unset>", var_name)
+		fmt.Fprintf(os.Stderr, "%s\n", var_val)
 	}
 	allVarSet = allVarSet && var_set
 	lastProcessedVar = var_name
@@ -95,7 +98,7 @@ func doLine(line string) {
 	} else {
 		fmt.Printf("%s", replLine(line))
 		if setMinusU && !allVarSet {
-			fmt.Fprintf(os.Stderr, ":: Environment variable '%s' is not set.\n", lastProcessedVar)
+			fmt.Fprintf(os.Stderr, ":: Some environment variable is not set. The last processed variable is '%s'.\n", lastProcessedVar)
 			os.Exit(1)
 		}
 	}
