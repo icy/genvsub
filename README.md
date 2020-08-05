@@ -140,7 +140,12 @@ a mess already.
 This tool may be an answer. By accepting not-so-many side-effects, we can easily archive the goal:
 
 ```
-$ kustomize build | genvsub -f variable_file | kubectl apply -f-
+$ kustomize build \
+  | genvsub -u -p "(ENV_[_A-Z0-9]+)|STG_NAMESPACE|IMAGE_TAG|RESOURCE_PREFIX_" \
+  > output.yaml
+$ if [[ $? -eq 0 ]]; then 
+    kubectl apply -f- < output.yaml
+  fi
 ```
 
 Yummy! It's another part of the pipe. As `genvsub` can limit the scope of side-effects,
