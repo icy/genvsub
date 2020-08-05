@@ -238,6 +238,9 @@ It's not well maintained. Please don't rely on it.
       which can be refined with `ENVSUB_PREFIX=%` and `ENVSUB_SUFFIX=%`.
       When hitting unset variables it will exit rather than expanding as empty strings.
       It also fully buffers input before writing, so in-place replacement is possible.
+- [ ] https://github.com/s12v/exec-with-secrets: Fetch configuration/secrets/variables
+      at run time, and provides them to your program. Now you have to rebuild your
+      docker images with the tool atop your original `executable` command.
 
 ## License
 
