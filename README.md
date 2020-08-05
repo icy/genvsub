@@ -95,6 +95,7 @@ git repository and our template/manifests/whatever (configuration) files.
 
 `kustomization` doesn't like to support build-time side-effects from CLI args/ or env variables.
 See the explanation: https://github.com/kubernetes-sigs/kustomize/blob/master/docs/eschewedFeatures.md#build-time-side-effects-from-cli-args-or-env-variables .
+(https://github.com/kubernetes-sigs/kustomize/blob/b6d760dc6fb40d75d83cc2dd18b9609ec43a3fb5/docs/eschewedFeatures.md#build-time-side-effects-from-cli-args-or-env-variables)
 They provide subcommand `kustomize edit` as an alternative, however that doesn't work
 with  all kind of changes you want to apply for your manifest files. `edit` command
 doesn't have better support than `patch` file, and the `patch` file has already some
