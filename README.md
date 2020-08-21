@@ -45,6 +45,7 @@ why this tool was written.
 To install on your laptop, please try the popular way
 
     $ go get -v github.com/icy/genvsub
+    $ export PATH=$PATH:$(go env GOPATH)/bin
 
 The program works with `STDIN` and write their output to `STDOUT`
 
