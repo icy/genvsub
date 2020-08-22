@@ -90,6 +90,20 @@ test_prefix_test_simple() {
   [[ $? -ge 1 ]]
 }
 
+test_multiple_lines() {
+  export JIRA_USER_NAME="foo
+  :user
+bar"
+  export JIRA_USER_PASSWORD="foo
+  :password
+bar"
+  ./genvsub < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
+  G_ERRORS="$?"
+  _grep "^  :user"
+  _grep "^  :password"
+  [[ "$G_ERRORS" -eq 0 ]]
+}
+
 test_prefix_test_complex() {
   export JIRA_USER_NAME=foo
   export JIRA_USER_PASSWORD=bar
@@ -105,7 +119,7 @@ test_prefix_test_complexv() {
   unset JIRA_USER_NAME
   unset JIRA_USER_PASSWORD
   ./genvsub -u -v -p 'JIRA_USER_NAME|JIRA_USER_PASSWORD' \
-    < tests/test.yaml > tests/${FUNCNAME[0]}.tmp
+    < tests/test.yaml > "tests/${FUNCNAME[0]}.tmp"
   G_ERRORS="$?"
   _grep "^JIRA_USER_NAME"
   _grep "^JIRA_USER_PASSWORD"
@@ -152,6 +166,7 @@ test_all() {
   _test test_prefix_test_complex  "Use prefix with not-so-simple regular expression"
   _test test_prefix_test_complexv "Use prefix with not-so-simple regular expression (Just print, don't do anything)"
   _test test_change_prefix        "Use prefix and no variable from the input can match them."
+  _test test_multiple_lines       "Test if program works with multiple lines input"
 }
 
 ## main routine
