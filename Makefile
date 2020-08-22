@@ -14,3 +14,7 @@ tests: clean build
 
 .PHONY: all
 all: build tests
+
+.PHONY: local
+local:
+	shellcheck tests/test.sh
