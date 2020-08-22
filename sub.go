@@ -21,6 +21,7 @@ import "flag"
 var regVarname = regexp.MustCompile(`.+`)
 var allVarSet = true
 var lastProcessedVar = ""
+var errors = 0
 
 /* users' controllers */
 var setMinusU bool
@@ -52,14 +53,19 @@ func repl_func(in []byte) []byte {
 	}
 
 	var_name := in_st[2 : len(in_st)-1]
+	var_set, var_val := lookUpEnv(var_name)
+	allVarSet = allVarSet && var_set
+	lastProcessedVar = var_name
+	return []byte(var_val)
+}
+
+func lookUpEnv(var_name string) (bool, string) {
 	var_val, var_set := os.LookupEnv(var_name)
 	if !var_set {
 		var_val = fmt.Sprintf("<%s::error::variable_unset>", var_name)
 		fmt.Fprintf(os.Stderr, "%s\n", var_val)
 	}
-	allVarSet = allVarSet && var_set
-	lastProcessedVar = var_name
-	return []byte(var_val)
+	return var_set, var_val
 }
 
 // https://github.com/jprichardson/readline-go/blob/master/readline.go
@@ -92,7 +98,12 @@ func doLine(line string) {
 	if scanOnly {
 		if found := scanLine(line); found != nil {
 			for _, v := range found {
-				fmt.Printf("%s\n", v[2:len(v)-1])
+				var_name := string(v[2 : len(v)-1])
+				var_set, _ := lookUpEnv(var_name)
+				fmt.Printf("%s\n", var_name)
+				if !var_set {
+					errors += 1
+				}
 			}
 		}
 	} else {
@@ -113,4 +124,8 @@ func main() {
 	regVarname = regexp.MustCompile(fmt.Sprintf(`\${(%s)}`, varPrefix))
 	fmt.Fprintf(os.Stderr, ":: genvsub is reading from STDIN and looking for variables with regexp '%s'\n", regVarname)
 	eachLine(os.Stdin, doLine)
+
+	if setMinusU && errors > 0 {
+		os.Exit(1)
+	}
 }

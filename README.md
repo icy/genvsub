@@ -29,9 +29,11 @@ whose names match a predefined prefix/regexp.
 
 ### Supported options
 
-* `-v` : Scan and output ocurrences of variables in the input
+* `-v`: Scan and output all occurrences of variables in the input.
 * `-u`: Raise error when environment variable is not set.
-        This option doesn't work when `-v` is used.
+        When being used with `-v`, the program scans through the whole
+        input; otherwise, the program stops immediately when there is
+        any undefined (environment) variable.
 * `-p regexp`: Limit substitution to variables that match this prefix.
         You can use some regular expression as prefix.
         Default to `[^}]+`. Can be used as an alternative
@@ -67,7 +69,7 @@ To limit substitution to variables that match some prefix, use `-p` option:
 The second command raises an error because the variable `TEST_VAR` matches
 the expected prefix `TEST_` and its value is not set.
 
-You can also specify exactly a few variables to be substituted 
+You can also specify exactly a few variables to be substituted
 (which is exactly an alternative to the `shell-format` option
 in the original GNU tool `envsubst`):
 
@@ -82,7 +84,7 @@ input argument `-p PREFIX`, the  program will build the final regexp
 
 1. Hence you can't use for example `-p '^FOO'`.
 2. You can also easily trick the program with some fun `PREFIX` ;)
-   However, as seen in 
+   However, as seen in
    https://github.com/icy/genvsub/blob/33e68048c6fe4b6ca0befadbc9fa5c19055ede8b/sub.go#L42
    the program enforces input data to follow the form `${VARIABLE_NAME}`.
    I'm still thinking if we can allow more tricks here.
@@ -144,7 +146,7 @@ This tool may be an answer. By accepting not-so-many side-effects, we can easily
 $ kustomize build \
   | genvsub -u -p "(ENV_[_A-Z0-9]+)|STG_NAMESPACE|IMAGE_TAG|RESOURCE_PREFIX_" \
   > output.yaml
-$ if [[ $? -eq 0 ]]; then 
+$ if [[ $? -eq 0 ]]; then
     kubectl apply -f- < output.yaml
   fi
 ```

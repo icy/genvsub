@@ -124,7 +124,7 @@ test_prefix_test_complexv() {
   G_ERRORS="$?"
   _grep "^JIRA_USER_NAME"
   _grep "^JIRA_USER_PASSWORD"
-  [[ "$G_ERRORS" -eq 0 ]]
+  [[ "$G_ERRORS" -ge 1 ]]
 }
 
 test_change_prefix() {
