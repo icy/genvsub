@@ -1,4 +1,6 @@
-## Alternative to Gettext's envsubst ![icy](https://github.com/icy/genvsub/workflows/icy/badge.svg)
+![icy](https://github.com/icy/genvsub/workflows/icy/badge.svg)
+
+## Alternative to Gettext's envsubst
 
 Substitutes environment variables in shell format strings,
 and can *raise error* if any environment is not set.
