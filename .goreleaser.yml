@@ -19,5 +19,3 @@ changelog:
     - '^test:'
 release:
   github:
-    user: icy
-    name: genvsub
