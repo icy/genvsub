@@ -2,8 +2,11 @@ name: icy
 
 on:
   push:
-    branches-ignore:
-    - nothing-does-matter
+    branches:
+      - 'master'
+    tags:
+      - 'v*'
+  pull_request:
 
 jobs:
   smoke:
@@ -20,7 +23,7 @@ jobs:
         make tests
 
   goreleaser:
-    # if: ${{ github.ref == 'refs/heads/master' }}
+    if: success()
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -35,6 +38,6 @@ jobs:
       uses: goreleaser/goreleaser-action@v2
       with:
         version: v0.143.0
-        args: release --debug --rm-dist --skip-validate
+        args: --snapshot
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
