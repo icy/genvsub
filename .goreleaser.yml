@@ -18,4 +18,6 @@ changelog:
     - '^docs:'
     - '^test:'
 release:
-  disable: false
+  github:
+    user: icy
+    name: genvsub
