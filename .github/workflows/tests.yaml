@@ -31,12 +31,12 @@ jobs:
       run: |
         set -ex
         make build tests
-        docker build -f Dockerfile -t icy/snapshots/genvsub:latest .
+        docker build -f Dockerfile -t icy/genvsub/snapshot:latest .
     - name: Push to GitHub Packages
       uses: docker/build-push-action@v1
       with:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
-        repository: icy/snapshots/genvsub
+        repository: icy/genvsub/snapshot
         tag_with_ref: true
