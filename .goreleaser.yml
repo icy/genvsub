@@ -18,5 +18,4 @@ changelog:
     - '^docs:'
     - '^test:'
 release:
-  github:
-    disable: false
+  disable: false
