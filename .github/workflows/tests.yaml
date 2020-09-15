@@ -27,7 +27,7 @@ jobs:
         go: [ '1.14' ]
     steps:
     - uses: actions/checkout@v2
-    - name: smoke
+    - name: Building docker image
       run: |
         set -ex
         make build tests
