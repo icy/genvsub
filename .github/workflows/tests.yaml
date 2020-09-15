@@ -18,3 +18,24 @@ jobs:
         set -ex
         make build
         make tests
+
+  docker_image:
+    if: ${{ github.ref == 'master' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [ '1.14' ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: smoke
+      run: |
+        set -ex
+        docker build -f Dockerfile -t icy/snapshots/genvsub:master .
+    - name: Push to GitHub Packages
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        repository: icy/snapshots/genvsub
+        tag_with_ref: true
