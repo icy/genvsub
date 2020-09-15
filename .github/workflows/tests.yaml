@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: [ '1.14', '1.13', '1.12']
+        go: [ '1.13', '1.12']
     steps:
     - uses: actions/checkout@v2
     - name: smoke
@@ -30,6 +30,7 @@ jobs:
     - name: smoke
       run: |
         set -ex
+        make build tests
         docker build -f Dockerfile -t icy/snapshots/genvsub:master .
     - name: Push to GitHub Packages
       uses: docker/build-push-action@v1
