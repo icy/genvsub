@@ -46,7 +46,11 @@ why this tool was written.
 
 ### Installation. Examples
 
-To install on your laptop, please try the popular way
+Starting from `v1.2.2`, you can download binary files generated automatically
+by Github-Action action (via goreleaser tool). You find the files from
+the release listing page: https://github.com/icy/genvsub/releases
+
+To install on your laptop by local compiling process, please try the popular way
 
     $ go get -v github.com/icy/genvsub
     $ export PATH=$PATH:$(go env GOPATH)/bin
