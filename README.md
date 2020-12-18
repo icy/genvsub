@@ -16,14 +16,8 @@ whose names match a predefined prefix/regexp.
   * [Supported options](#supported-options)
   * [Installation. Examples](#installation-examples)
   * [Note on variable prefix](#note-on-variable-prefix)
-* [Problems](#problems)
-  * [Kustomization](#kustomization)
-  * [Helm or Terraform](#helm-or-terraform)
-  * TODO: [Sops](#sops)
-  * TODO: [Git-secret or Git-crypt](#get-secret-or-git-crypt)
 * [Development](#development)
   * [Smoke tests](#smoke-tests)
-  * [Ruby version](#ruby-version)
 * [References](#references)
 * [License](#license)
 
@@ -114,12 +108,7 @@ Please have a look at [tests/test.sh](tests/test.sh).
 
 ### Ruby version
 
-The usage is almost the same.
-
-    $ echo 'My home is ${HOME}' | ./sub.rb
-
-*WARNING*: The `Ruby` version is written for a reference purpose.
-It's not well maintained. Please don't rely on it.
+Removed on Dec 18th 2020.
 
 ## References
 
