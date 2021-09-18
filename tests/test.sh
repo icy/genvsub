@@ -6,7 +6,7 @@
 
 test_help() {
   genvsub --help
-  [[ $? -ge 2 ]]
+  [[ $? -eq 0 ]]
 }
 
 # Looking for something from the output file
