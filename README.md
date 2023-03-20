@@ -49,10 +49,14 @@ To install on your laptop by local compiling process, please try the popular way
     $ go get -v github.com/icy/genvsub
     $ export PATH=$PATH:$(go env GOPATH)/bin
 
+If you don't want to install, you can use it like this:
+
+    $ echo '${HOME}' |  go run github.com/icy/genvsub@latest -u
+    
 The program works with `STDIN` and write their output to `STDOUT`
 
-    $ echo 'My home is $HOME'   | ./genvsub
-    $ echo 'My home is ${HOME}' | ./genvsub
+    $ echo 'My home is $HOME'   | ./genvsub # This will output "My home is $HOME"
+    $ echo 'My home is ${HOME}' | ./genvsub # This will output "My home is /home/your-home-path"
     $ echo 'Raise error with unset variable ${XXHOME}' | ./genvsub -u
 
 To limit substitution to variables that match some prefix, use `-p` option:
