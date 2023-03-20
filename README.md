@@ -55,8 +55,8 @@ If you don't want to install, you can use it like this:
     
 The program works with `STDIN` and write their output to `STDOUT`
 
-    $ echo 'My home is $HOME'   | ./genvsub (This will output "My home is $HOME")
-    $ echo 'My home is ${HOME}' | ./genvsub (This will output "My home is /home/your-home-path")
+    $ echo 'My home is $HOME'   | ./genvsub # This will output "My home is $HOME"
+    $ echo 'My home is ${HOME}' | ./genvsub # This will output "My home is /home/your-home-path"
     $ echo 'Raise error with unset variable ${XXHOME}' | ./genvsub -u
 
 To limit substitution to variables that match some prefix, use `-p` option:
